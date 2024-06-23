@@ -1,0 +1,383 @@
+import config as cfg
+import logging
+from aiogram import Bot, Dispatcher, executor, types
+logging.basicConfig(level=logging.INFO)
+from db import Database
+import functions as fc
+
+bot = Bot(token=cfg.TOKEN)
+dp = Dispatcher(bot)
+db = Database('base.db')
+
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    await bot.send_message(message.from_user.id, "🫧Привет! Это шаблон моего бота, протестируй его.\nНадеюсь, он тебе понравится ;)\nЗа покупкой к @manager_in_telegram (Тиму₽)💤")
+
+@dp.message_handler()
+async def mess(message: types.Message):
+    answer_id = fc.recognize_question(message.text, db.get_questions())
+    await bot.send_message(message.from_user.id, db.get_answer(answer_id))
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
+
+
+
+kb_client = ReplyKeyboardMarkup(resize_keyboard=True)
+b1 = KeyboardButton("#1")
+b2 = KeyboardButton("#2")
+b3 = KeyboardButton("#3")
+
+kb_client.row(b1,b2)
+kb_client.row(b3)
+
+def kb_client() -> ReplyKeyboardMarkup:
+    kb = ReplyKeyboardMarkup([
+        [KeyboardButton('#1'), KeyboardButton('#2'), KeyboardButton('#3'), KeyboardButton('#4'), KeyboardButton('#5')],
+        [KeyboardButton('#6'), KeyboardButton('#7'), KeyboardButton('#8'), KeyboardButton('#9'), KeyboardButton('#10')],
+        [KeyboardButton('#11'), KeyboardButton('#12'), KeyboardButton('#13'), KeyboardButton('#14'), KeyboardButton('#15')],
+        [KeyboardButton('#16'), KeyboardButton('#17'), KeyboardButton('#18'), KeyboardButton('#19'), KeyboardButton('#20')],
+        [KeyboardButton('#21'), KeyboardButton('#22'), KeyboardButton('#23'), KeyboardButton('#24'), KeyboardButton('#25')],
+    ])
+    return kb
+
+# callback
+from inln.inline2 import txt_btn2
+
+@dp.message_handler()
+async def callback1(callback_quevery: types.CallbackQuery):
+    if callback1 == '1':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='📛Мы, небольшая компания программистов со специализацией на разработке телеграм ботов. Владеем языками программирования: Python, JavaScript, HTML, Css и др. Занимаемся созданием как стандартных ботов, так и ботов с WEB приложением. Используем библиотеки Aiogram, pyTelegramBotAPI.\nСДЕЛАЕМ УДОБНЫЙ МАГАЗИН ИЛИ ТЕЛЕГРАМ БОТА, КОТОРЫЙ УПРОСТИТ ВАМ ЖИЗНЬ!🪐')
+    elif callback1 == '2':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Тут должна быть информация🛜')
+    elif callback1 == '3':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Тут должна быть информация🛜')
+
+
+
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+txt_btn = InlineKeyboardMarkup(inline_keyboard=True)
+b1 = InlineKeyboardButton('1', callback_data='№1')
+b2 = InlineKeyboardButton('2', callback_data='№2')
+b3 = InlineKeyboardButton('3', callback_data='№3')
+b4 = InlineKeyboardButton('4', callback_data='№4')
+b5 = InlineKeyboardButton('5', callback_data='№5')
+b6 = InlineKeyboardButton('6', callback_data='№6')
+txt_btn.add(b1), txt_btn.add(b2)
+txt_btn.row(b3, b4)
+txt_btn.add(b5), txt_btn.add(b6)
+
+
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+txt_btn2 = InlineKeyboardMarkup(inline_keyboard=True)
+btn1 = InlineKeyboardButton('О нас🦄', callback_data='1')
+btn2 = InlineKeyboardButton('Ячейка №2', callback_data='2')
+btn3 = InlineKeyboardButton('Ячейка №3', callback_data='3')
+btn4 = InlineKeyboardButton('Админ/Менеджер по рекламе👔', url='https://t.me/manager_in_telegram')
+btn5 = InlineKeyboardButton('Владелец тгк👑', url='https://t.me/manager_in_telegram')
+txt_btn2.row(btn1, btn2, btn3)
+txt_btn2.row(btn4, btn5)
+
+
+@dp.callback_query_handler()
+async def callback1(callback_quevery: types.CallbackQuery):
+    if callback_quevery.data == '1':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='📛Мы, небольшая компания программистов со специализацией на разработке телеграм ботов. Владеем языками программирования: Python, JavaScript, HTML, Css и др. Занимаемся созданием как стандартных ботов, так и ботов с WEB приложением. Используем библиотеки Aiogram, pyTelegramBotAPI.\nСДЕЛАЕМ УДОБНЫЙ МАГАЗИН ИЛИ ТЕЛЕГРАМ БОТА, КОТОРЫЙ УПРОСТИТ ВАМ ЖИЗНЬ!🪐')
+    elif callback_quevery.data == '2':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Тут должна быть информация🛜')
+    elif callback_quevery.data == '3':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Тут должна быть информация🛜')
+
+@dp.callback_query_handler()
+async def callback2(callback_quevery: types.CallbackQuery):
+    if callback_quevery.data == 'data-1':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №1(Реклама 1 час)🎁\nЦена - 99руб💵')
+    elif callback_quevery.data == 'data-2':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №2(Реклама 3 часа)🎁\nЦена - 399руб💵')
+    elif callback_quevery.data == 'data-3':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №3(Реклама 5 часов)🎁\nЦена - 499руб💵')
+    elif callback_quevery.data == 'data-4':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №4(Реклама 10 часов)🎁\nЦена - 699руб💵')
+    elif callback_quevery.data == 'data-5':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №5(Реклама 24 часа)🎁\nЦена - 999руб💵')
+    elif callback_quevery.data == 'data-6':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №6(Реклама 3 дня)🎁\nЦена - 2999руб💵')
+
+await message.answer('О НАС/КОНТАКТЫ⚠️', reply_markup=txt_btn2) 
+
+ты самый лучший бот:красавчик:лучший бот:гений:лучший бот:хороший бот	Спасибо! Рад был это услышать💗
+плохой бот:дизлайк:тупой бот:лаганый бот:лагает:разочаровал	Неправда!!!🚷
+скиньте прайс:сколько стоит:сколько стоит реклама:информация о рекламе	99руб - реклама час в тгк☑️
+оплатить рекламу:купить рекламу:на какую карту кидать деньги:оплатить:деньги	Для оплаты нужно перейти в группу: t.me/newspredlozhka) Затем скинуть текст для вашего поста, свой username в Телеграме и прикрепить фото🎆
+
+    if callback_quevery.data == 'n':
+        await bot.edit_message_reply_markup('*ТУТ БУДЕТ ПРАЙС*\nЭТО ПРИМЕР, СДЕЛАЮ КРАСИВЕЕ!!!', reply_markup=txt_btn1)
+    if callback_quevery.data == 'nn':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='*Инструкция по покупке*')
+
+
+:param state:
+:param custom_filters:
+:param run_task: run callback in task (no wait results)
+:param kwargs:
+
+    if callback_quevery.data == 'n':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Отмена❌')
+    elif callback_quevery.data == 'nn':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Диалог начат🌐')
+
+
+@dp.callback_query_handler(lambda callback_query: callback_query.startswith('n'))
+
+
+lambda message: message.text.startswith('*')
+
+    if callback_quevery.data == 'data-1':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №1(Реклама 1 час)🎁\nЦена - 99руб💵')
+    elif callback_quevery.data == 'data-2':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №2(Реклама 3 часа)🎁\nЦена - 399руб💵')
+    elif callback_quevery.data == 'data-3':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №3(Реклама 5 часов)🎁\nЦена - 499руб💵')
+    elif callback_quevery.data == 'data-4':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №4(Реклама 10 часов)🎁\nЦена - 699руб💵')
+    elif callback_quevery.data == 'data-5':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №5(Реклама 24 часа)🎁\nЦена - 999руб💵')
+    elif callback_quevery.data == 'data-6':
+        await bot.send_message(chat_id=callback_quevery.from_user.id, text='Услуга №6(Реклама 3 дня)🎁\nЦена - 2999руб💵')
+
+
+
+    if callback_quevery.data == 'a':
+        await callback_quevery.message.edit_text(text='ТУТ БУДЕТ ПРАЙС*\nЭТО ПРИМЕР, СДЕЛАЮ КРАСИВЕЕ!!!', reply_markup=txt_btn1)
+    elif callback_quevery.data == 'aa':
+
+await message.answer('*ТУТ БУДЕТ ПРАЙС*\nЭТО ПРИМЕР, СДЕЛАЮ КРАСИВЕЕ!!!', reply_markup=txt_btn1) 
+
+
+await callback.answer('Заявка принята💟')
+
+await message.reply('💬 Ваша анкета успешно создана📝\nОжидайте администратор рассмотрит вашу заявку📊\n \n📍 Не отчищайте историю, админ ответит вам в боте!')
+
+
+    
+@dp.message_handler(lambda message: not message.photo)
+async def b0(message: types.Message):
+    if message.text == 'Отмена❌':
+        await message.answer('Меню♻️', reply_markup=kb_client1)
+    else:
+        await message.reply('💬 Это не фотография!')
+
+
+
+6739191456:AAFVl9Wb6TdyxJiC-JCWAtVTvtuXvqYT8b4
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+МЕДИА ГРУППА
+
+
+
+import asyncio
+
+from aiogram import Bot, Dispatcher, executor, filters, types
+
+
+API_TOKEN = '6739191456:AAFVl9Wb6TdyxJiC-JCWAtVTvtuXvqYT8b4'
+
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
+
+
+@dp.message_handler(filters.CommandStart())
+async def send_welcome(message: types.Message):
+    # So... At first I want to send something like this:
+    await message.reply("Do you want to see many pussies? Are you ready?")
+
+    # Wait a little...
+    await asyncio.sleep(1)
+
+    # Good bots should send chat actions...
+    await types.ChatActions.upload_photo()
+
+    # Create media group
+    media = types.MediaGroup()
+
+    # Attach local file
+    media.attach_photo(types.InputFile('telebot/n.png'), 'Earth!')
+    # More local files and more cats!
+    media.attach_photo(types.InputFile('telebot/n.png'), 'More!')
+
+    # You can also use URL's
+    # For example: get random puss:
+    media.attach_photo('https://s1.1zoom.ru/big3/984/Canada_Parks_Lake_Mountains_Forests_Scenery_Rocky_567540_3840x2400.jpg', 'Random pease.')
+
+    # And you can also use file ID:
+    # media.attach_photo('<file_id>', 'cat-cat-cat.')
+
+    # Done! Send media group
+    await message.reply_media_group(media=media)
+
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+ОПЛАТА
+
+
+from aiogram import Bot
+from aiogram import types
+from aiogram.dispatcher import Dispatcher
+from aiogram.types.message import ContentTypes
+from aiogram.utils import executor
+
+
+BOT_TOKEN = 'BOT_TOKEN_HERE'
+PAYMENTS_PROVIDER_TOKEN = '123456789:TEST:1422'
+
+bot = Bot(BOT_TOKEN)
+dp = Dispatcher(bot)
+
+# Setup prices
+prices = [
+    types.LabeledPrice(label='Working Time Machine', amount=5750),
+    types.LabeledPrice(label='Gift wrapping', amount=500),
+]
+
+# Setup shipping options
+shipping_options = [
+    types.ShippingOption(id='instant', title='WorldWide Teleporter').add(types.LabeledPrice('Teleporter', 1000)),
+    types.ShippingOption(id='pickup', title='Local pickup').add(types.LabeledPrice('Pickup', 300)),
+]
+
+
+@dp.message_handler(commands=['start'])
+async def cmd_start(message: types.Message):
+    await bot.send_message(message.chat.id,
+                           "Hello, I'm the demo merchant bot."
+                           " I can sell you a Time Machine."
+                           " Use /buy to order one, /terms for Terms and Conditions")
+
+
+@dp.message_handler(commands=['terms'])
+async def cmd_terms(message: types.Message):
+    await bot.send_message(message.chat.id,
+                           'Thank you for shopping with our demo bot. We hope you like your new time machine!\n'
+                           '1. If your time machine was not delivered on time, please rethink your concept of time'
+                           ' and try again.\n'
+                           '2. If you find that your time machine is not working, kindly contact our future service'
+                           ' workshops on Trappist-1e. They will be accessible anywhere between'
+                           ' May 2075 and November 4000 C.E.\n'
+                           '3. If you would like a refund, kindly apply for one yesterday and we will have sent it'
+                           ' to you immediately.')
+
+
+@dp.message_handler(commands=['buy'])
+async def cmd_buy(message: types.Message):
+    await bot.send_message(message.chat.id,
+                           "Real cards won't work with me, no money will be debited from your account."
+                           " Use this test card number to pay for your Time Machine: `4242 4242 4242 4242`"
+                           "\n\nThis is your demo invoice:", parse_mode='Markdown')
+    await bot.send_invoice(message.chat.id, title='Working Time Machine',
+                           description='Want to visit your great-great-great-grandparents?'
+                                       ' Make a fortune at the races?'
+                                       ' Shake hands with Hammurabi and take a stroll in the Hanging Gardens?'
+                                       ' Order our Working Time Machine today!',
+                           provider_token=PAYMENTS_PROVIDER_TOKEN,
+                           currency='usd',
+                           photo_url='https://telegra.ph/file/d08ff863531f10bf2ea4b.jpg',
+                           photo_height=512,  # !=0/None or picture won't be shown
+                           photo_width=512,
+                           photo_size=512,
+                           is_flexible=True,  # True If you need to set up Shipping Fee
+                           prices=prices,
+                           start_parameter='time-machine-example',
+                           payload='HAPPY FRIDAYS COUPON')
+
+
+@dp.shipping_query_handler(lambda query: True)
+async def shipping(shipping_query: types.ShippingQuery):
+    await bot.answer_shipping_query(shipping_query.id, ok=True, shipping_options=shipping_options,
+                                    error_message='Oh, seems like our Dog couriers are having a lunch right now.'
+                                                  ' Try again later!')
+
+
+@dp.pre_checkout_query_handler(lambda query: True)
+async def checkout(pre_checkout_query: types.PreCheckoutQuery):
+    await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True,
+                                        error_message="Aliens tried to steal your card's CVV,"
+                                                      " but we successfully protected your credentials,"
+                                                      " try to pay again in a few minutes, we need a small rest.")
+
+
+@dp.message_handler(content_types=ContentTypes.SUCCESSFUL_PAYMENT)
+async def got_payment(message: types.Message):
+    await bot.send_message(message.chat.id,
+                           'Hoooooray! Thanks for payment! We will proceed your order for `{} {}`'
+                           ' as fast as possible! Stay in touch.'
+                           '\n\nUse /buy again to get a Time Machine for your friend!'.format(
+                               message.successful_payment.total_amount / 100, message.successful_payment.currency),
+                           parse_mode='Markdown')
+
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+'Оплатить рекламу💸'
+
+
+@dp.message_handler(lambda message: message.text == '', content_types=['text'])
+async def ab1(message: types.Message):
+    await message.answer('🚨Поделись своей новостью в нашем сообществе🗣', reply_markup=txt_btn3)
+
+
+
+@dp.callback_query_handler(lambda callback_query: callback_query.data.startswith('n'))
+async def del_callback(callback_query: types.CallbackQuery, state: FSMContext):
+    if callback_query.data == 'nn':
+        await bot.send_message(chat_id=callback_query.from_user.id, text='Диалог начат🌐')
+        await callback_query.message.edit_text(text='Задайте любой вопрос, относящейся к боту, к оплате и тд.\nсразу ответим✏️', reply_markup=txt_btn5)
+        @dp.message_handler(lambda message: message.text.startswith('*'))
+        async def mess(message: types.Message):
+            answer_id = fc.recognize_question(message.text, db.get_questions())
+            await message.answer(db.get_answer(answer_id))
+            await chat.text.set()
+
+
+await callback_query.message.edit_reply_markup(txt_btn4)
+        await bot.send_message(chat_id=callback_query.from_user.id, text='Диалог закончен❌')
+        await state.finish()
+
+(chat_id=message.from_user.id,
+                             media=media, text=f"{data['username']}\n{data['description']}\n \n{txt}", reply_markup=txt_btn8)
+
+
+, text=f"{data['username']}\n{data['description']}\n \n{txt}", reply_markup=txt_btn9
+
+
+
+await bot.send_chat_action(call.message.chat.id, types.ChatActions.UPLOAD_DOCUMENT) 
+await bot.send_media_group(call.message.chat.id, media=media)
+
+
+
+await bot.send_photo(chat_id=group2_id, photo=data['photo'], caption=f"{data['username']}\n{data['description']}")
+
+
+
+
+@dp.message_handler(lambda message: not message.photo or not message.video)
+async def b2(message: types.Message, state: FSMContext):
+    if message.text == 'Отмена❌':
+        await message.answer('Меню♻️', reply_markup=kb_client1)
+        await state.finish()
+    else:
+        await message.reply('💬 Это не фотографии и не видео!')
